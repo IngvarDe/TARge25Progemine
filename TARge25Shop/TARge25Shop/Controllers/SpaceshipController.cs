@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TARge25Shop.Core.Dto;
 using TARge25Shop.Core.ServiceInterface;
+using TARge25Shop.Data;
 using TARge25Shop.Models.Spaceship;
 
 namespace TARge25Shop.Controllers
@@ -8,18 +9,35 @@ namespace TARge25Shop.Controllers
     public class SpaceshipController : Controller
     {
         private readonly ISpaceshipServices _spaceshipServices;
+        private readonly TARge25ShopContext _context;
 
         public SpaceshipController
             (
-                ISpaceshipServices spaceshipServices
+                ISpaceshipServices spaceshipServices,
+                TARge25ShopContext context
             )
         {
             _spaceshipServices = spaceshipServices;
+            _context = context;
         }
 
         public IActionResult Index()
         {
-            return View();
+
+            // Kutsume teenuse välja, et saada kõik kosmoselaevad. 
+            //constructoris tuleb välja kutsuda DbContext, et
+            //saaksime andmeid kätte.
+            var result = _context.Spaceships
+                .Select(x => new SpaceshipIndexViewModel
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    ShipType = x.ShipType,
+                    CreatedAt = x.CreatedAt,
+                    Crew = x.Crew
+                });
+
+            return View(result);
         }
 
         [HttpGet]
