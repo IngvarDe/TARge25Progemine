@@ -18,7 +18,7 @@ public class SpaceshipServices : ISpaceshipServiceInterface
         _fileServices =  fileServices;
     }
     
-    public async Task<Spaceship?> Create(SpaceshipDto spaceshipDto)
+    public async Task<Spaceship> Create(SpaceshipDto spaceshipDto)
     {
         var spaceship = new Spaceship
         {
