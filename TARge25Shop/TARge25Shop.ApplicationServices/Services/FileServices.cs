@@ -51,7 +51,7 @@ public class FileServices :IFileServices
         }
     }
 
-    public async Task<bool> RemoveImageFromApi(FileToApiDto dto)
+    public async Task<bool> RemoveImageFromApi(FileToApiDto dto, bool saveChanges = true)
     {
         var image = await _dbContext.FilesToApis
             .FirstOrDefaultAsync(x => x.Id == dto.Id);
@@ -63,6 +63,20 @@ public class FileServices :IFileServices
         if (File.Exists(filePath)) File.Delete(filePath);
 
         _dbContext.FilesToApis.Remove(image);
+        
+        if (saveChanges)
+        {
+            await _dbContext.SaveChangesAsync();
+        }
+        return true;
+    }
+
+    public async Task<bool> RemoveImagesFromApi(FileToApiDto[] dtos)
+    {
+        foreach (var dto in dtos)
+        {
+            await RemoveImageFromApi(dto, false);    // Separate bool for avoiding making multiple calls to db
+        }
         await _dbContext.SaveChangesAsync();
         
         return true;

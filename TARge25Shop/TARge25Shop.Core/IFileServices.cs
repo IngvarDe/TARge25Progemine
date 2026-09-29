@@ -7,6 +7,7 @@ public interface IFileServices
 {
     public void ConvertFilesToApi(SpaceshipDto dto, Spaceship spaceship);
     
-    Task<bool> RemoveImageFromApi(FileToApiDto dto);
+    Task<bool> RemoveImageFromApi(FileToApiDto dto, bool saveChanges = true);
+    Task<bool> RemoveImagesFromApi(FileToApiDto[] dtos);
     
 }
