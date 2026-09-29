@@ -183,13 +183,7 @@ public class SpaceshipController : Controller
             return NotFound();
         }
 
-        var images = await _dbContext.FilesToApis
-            .Where(x => x.SpaceshipId == id)
-            .Select(y => new ImageViewModel
-            {
-                FilePath = y.ExistingFilePath,
-                ImageId = y.Id
-            }).ToArrayAsync<ImageViewModel>();
+        var images = await GetImagesBySpaceshipId(id);
         
         var viewmodel = new SpaceshipDetailsViewModel
         {
@@ -205,6 +199,19 @@ public class SpaceshipController : Controller
         viewmodel.Images.AddRange(images);
 
         return View(viewmodel);
+    }
+
+    private async Task<ImageViewModel[]> GetImagesBySpaceshipId(Guid id)
+    {
+        var images = await _dbContext.FilesToApis
+            .Where(x => x.SpaceshipId == id)
+            .Select(y => new ImageViewModel
+            {
+                FilePath = y.ExistingFilePath,
+                ImageId = y.Id
+            }).ToArrayAsync<ImageViewModel>();
+        
+        return images;
     }
     
 }
