@@ -248,7 +248,4 @@ public class SpaceshipController : Controller
                 SpaceshipId = x.SpaceshipId
             }).ToArray();
     }
-    
-    
-    
 }

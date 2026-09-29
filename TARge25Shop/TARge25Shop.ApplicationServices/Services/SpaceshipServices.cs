@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using TARge25Shop.Core;
 using TARge25Shop.Core.Domain;
@@ -84,10 +85,27 @@ public class SpaceshipServices : ISpaceshipServiceInterface
     {
         var result = await DetailAsync(id);
 
-        _dbContext.Spaceships.Remove(result);
-        await _dbContext.SaveChangesAsync();
+        var images = await _dbContext.FilesToApis
+            .Where(x => x.SpaceshipId == id)
+            .Select(y => new FileToApiDto
+            {
+                Id = y.Id,
+                SpaceshipId = y.SpaceshipId,
+                ExistingFilePath = y.ExistingFilePath
+            }).ToArrayAsync();
+
+        try
+        {
+            _dbContext.Spaceships.Remove(result);
+            await _dbContext.SaveChangesAsync();
+        }
+        catch (Exception e)
+        {
+            Debug.WriteLine("Exception:  " + e.Message);
+        }
 
         return result;
     }
+    
     
 }
