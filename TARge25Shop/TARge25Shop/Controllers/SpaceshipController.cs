@@ -136,13 +136,7 @@ public class SpaceshipController : Controller
             return NotFound();
         }
 
-        var images = await _dbContext.FilesToApis
-            .Where(x => x.SpaceshipId == id)
-            .Select(y => new ImageViewModel
-            {
-                FilePath = y.ExistingFilePath,
-                ImageId = y.Id
-            }).ToArrayAsync();
+        var images = await GetImagesBySpaceshipId(id);
         
         var viewModel = new SpaceshipDeleteViewModel
         {

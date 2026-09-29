@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using TARge25Shop.Core;
 using TARge25Shop.Core.Domain;
 using TARge25Shop.Core.Dto;
@@ -48,5 +49,22 @@ public class FileServices :IFileServices
                 }
             }
         }
+    }
+
+    public async Task<bool> RemoveImageFromApi(FileToApiDto dto)
+    {
+        var image = await _dbContext.FilesToApis
+            .FirstOrDefaultAsync(x => x.Id == dto.Id);
+        
+        if (image == null) return false;
+        
+        var filePath = Path.Combine(_webHost.ContentRootPath, "wwwroot", "multipleFileUpload", image.ExistingFilePath);
+        
+        if (File.Exists(filePath)) File.Delete(filePath);
+
+        _dbContext.FilesToApis.Remove(image);
+        await _dbContext.SaveChangesAsync();
+        
+        return true;
     }
 }
