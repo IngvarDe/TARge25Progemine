@@ -1,4 +1,4 @@
-namespace TARge25Shop.Models;
+namespace TARge25Shop.Models.Spaceship;
 
 public class ImageViewModel
 {
