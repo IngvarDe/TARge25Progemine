@@ -4,7 +4,7 @@ using TARge25Shop.Core.Dto;
 using TARge25Shop.Data;
 using Microsoft.Extensions.Hosting;
 
-namespace TARge25Shop.ApplicationServices;
+namespace TARge25Shop.ApplicationServices.Services;
 
 public class FileServices :IFileServices
 {
