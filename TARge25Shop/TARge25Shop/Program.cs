@@ -19,12 +19,12 @@ namespace TARge25Shop
             
             builder.Services.AddScoped<ISpaceshipServiceInterface, SpaceshipServices>();
             builder.Services.AddScoped<IFileServices, FileServices>();
+            builder.Services.AddScoped<IRealEstateServices, RealEstateServices>();
             
             builder.Services.AddDbContext<TARge25ShopContext>(options =>
                 options.UseSqlite(
                     builder.Configuration.GetConnectionString("DefaultConnection")));
-
-
+            
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
