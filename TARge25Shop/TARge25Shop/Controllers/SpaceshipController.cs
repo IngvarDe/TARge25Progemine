@@ -49,19 +49,20 @@ public class SpaceshipController : Controller
     [HttpPost]
     public async Task<IActionResult> Create(SpaceshipCreateUpdateViewmodel viewmodel)
     {
-        // if (!ModelState.IsValid)
-        // {
-        //     return View(viewmodel);
-        // }
-        
         var dto = new SpaceshipDto
         {
-            // Id = viewmodel.Id,
             Name = viewmodel.Name,
             ShipType = viewmodel.ShipType,
             MaxCrewSize = viewmodel.MaxCrewSize,
             EnginePower = viewmodel.EnginePower,
-            // CreatedAt = viewmodel.CreatedAt
+            Files = viewmodel.Files,
+            FileToApiDtos =viewmodel.Images
+                .Select(x => new FileToApiDto
+                {
+                    Id = x.ImageId,
+                    ExistingFilePath = x.FilePath,
+                    SpaceshipId = x.SpaceshipId
+                })
         };
         
         var result = await _spaceshipService.Create(dto);

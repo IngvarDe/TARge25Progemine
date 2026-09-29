@@ -9,7 +9,6 @@ namespace TARge25Shop.ApplicationServices;
 public class FileServices :IFileServices
 {
     private readonly TARge25ShopContext _dbContext;
-
     private  readonly IHostEnvironment _webHost;
     
     public FileServices(TARge25ShopContext dbContext, IHostEnvironment webHost)
@@ -21,7 +20,7 @@ public class FileServices :IFileServices
     public void ConvertFilesToApi(SpaceshipDto dto, Spaceship spaceship)
     {
         string ContentRootPath = _webHost.ContentRootPath;
-        string _path = ContentRootPath + "\\wwroot\\multipleFileUpload\\";
+        string _path = ContentRootPath + "\\wwwroot\\multipleFileUpload\\";
         
         if (dto.Files != null && dto.Files.Count >= 0)
         {
