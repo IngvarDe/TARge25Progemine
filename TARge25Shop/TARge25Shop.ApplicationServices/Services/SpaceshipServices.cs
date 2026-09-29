@@ -64,6 +64,7 @@ public class SpaceshipServices : ISpaceshipServiceInterface
         spaceship.EnginePower = dto.EnginePower;
         spaceship.CreatedAt = dto.CreatedAt;
         spaceship.UpdatedAt = DateTime.Now;
+        _fileServices.ConvertFilesToApi(dto, spaceship);
         
         _dbContext.Spaceships.Update(spaceship);
         await _dbContext.SaveChangesAsync();

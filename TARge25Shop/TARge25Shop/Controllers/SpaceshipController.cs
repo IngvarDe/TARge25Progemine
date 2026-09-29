@@ -11,11 +11,14 @@ public class SpaceshipController : Controller
 {
     private readonly ISpaceshipServiceInterface _spaceshipService;
     private readonly TARge25ShopContext _dbContext;
+    private readonly IFileServices _fileServices;
 
-    public SpaceshipController(ISpaceshipServiceInterface spaceshipService, TARge25ShopContext dbContext)
+    public SpaceshipController(
+        ISpaceshipServiceInterface spaceshipService, TARge25ShopContext dbContext, IFileServices fileServices)
     {
         _spaceshipService = spaceshipService;
         _dbContext = dbContext;
+        _fileServices = fileServices;
     }
     
     [HttpGet]
@@ -82,7 +85,9 @@ public class SpaceshipController : Controller
         if (spaceship == null) 
         {
             return NotFound();
-        } 
+        }
+
+        var images = await GetImagesBySpaceshipId(id);
         
         var viewmodel = new SpaceshipCreateUpdateViewmodel
         {
@@ -94,6 +99,8 @@ public class SpaceshipController : Controller
             CreatedAt = spaceship.CreatedAt,
             UpdatedAt = spaceship.UpdatedAt
         };
+        
+        viewmodel.Images.AddRange(images);
         
         return View("CreateUpdate", viewmodel);
     }
@@ -114,8 +121,13 @@ public class SpaceshipController : Controller
             MaxCrewSize = viewmodel.MaxCrewSize,
             EnginePower = viewmodel.EnginePower,
             CreatedAt = viewmodel.CreatedAt,
-            UpdatedAt = viewmodel.UpdatedAt
+            UpdatedAt = viewmodel.UpdatedAt,
+            Files = viewmodel.Files,
+            FileToApiDtos = MapToImageDtos(viewmodel)
         };
+        
+        
+        
         var result = await _spaceshipService.Update(dto); 
 
         if (result == null)
@@ -194,6 +206,24 @@ public class SpaceshipController : Controller
 
         return View(viewmodel);
     }
+    
+    [HttpPost]
+    public async Task<IActionResult> RemoveImage(ImageViewModel vm)
+    {
+        var dto = new FileToApiDto()
+        {
+            Id = vm.ImageId
+        };
+
+        var image = await _fileServices.RemoveImageFromApi(dto);
+
+        if (image == null)
+        {
+            return RedirectToAction(nameof(Index));
+        }
+
+        return RedirectToAction(nameof(Index));
+    }
 
     private async Task<ImageViewModel[]> GetImagesBySpaceshipId(Guid id)
     {
@@ -207,5 +237,18 @@ public class SpaceshipController : Controller
         
         return images;
     }
+
+    private FileToApiDto[] MapToImageDtos(SpaceshipCreateUpdateViewmodel viewmodel)
+    {
+        return viewmodel.Images
+            .Select(x => new FileToApiDto
+            {
+                Id = x.ImageId,
+                ExistingFilePath = x.FilePath,
+                SpaceshipId = x.SpaceshipId
+            }).ToArray();
+    }
+    
+    
     
 }
