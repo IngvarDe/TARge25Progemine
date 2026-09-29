@@ -1,12 +1,9 @@
-using Microsoft.AspNetCore.Components.Web.HtmlRendering;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TARge25Shop.Core;
-using TARge25Shop.Core.Domain;
 using TARge25Shop.Models.Spaceship;
 using TARge25Shop.Core.Dto;
 using TARge25Shop.Data;
-using TARge25Shop.Models;
 
 namespace TARge25Shop.Controllers;
 
@@ -139,6 +136,14 @@ public class SpaceshipController : Controller
             return NotFound();
         }
 
+        var images = await _dbContext.FilesToApis
+            .Where(x => x.SpaceshipId == id)
+            .Select(y => new ImageViewModel
+            {
+                FilePath = y.ExistingFilePath,
+                ImageId = y.Id
+            }).ToArrayAsync();
+        
         var viewModel = new SpaceshipDeleteViewModel
         {
             Id = spaceship.Id,
@@ -149,6 +154,8 @@ public class SpaceshipController : Controller
             CreatedAt = spaceship.CreatedAt,
             UpdatedAt = spaceship.UpdatedAt
         };
+        
+        viewModel.Images.AddRange(images);
 
         return View(viewModel);
     }

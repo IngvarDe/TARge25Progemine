@@ -19,25 +19,24 @@ public class FileServices :IFileServices
 
     public void ConvertFilesToApi(SpaceshipDto dto, Spaceship spaceship)
     {
-        string ContentRootPath = _webHost.ContentRootPath;
-        string _path = ContentRootPath + "\\wwwroot\\multipleFileUpload\\";
-        
         if (dto.Files != null && dto.Files.Count >= 0)
         {
-            if (!Directory.Exists(_path))
+            string uploadsFolder = Path.Combine(_webHost.ContentRootPath, "wwwroot", "multipleFileUpload");
+            
+            if (!Directory.Exists(uploadsFolder))
             {
-                Directory.CreateDirectory(_path);
+                Directory.CreateDirectory(uploadsFolder);
             }
 
             foreach (var file in dto.Files)
             {
-                string uploadsFolder = Path.Combine(ContentRootPath, "wwroot", "multipleFileUpload");
                 string uniqueFileName = Guid.NewGuid().ToString() + "_" + file.FileName;
                 string fullPath = Path.Combine(uploadsFolder, uniqueFileName);
 
                 using (var fileStream = new FileStream(fullPath, FileMode.Create))
                 {
                     file.CopyTo(fileStream);
+                    
                     FileToApi path = new FileToApi
                     {
                         Id = Guid.NewGuid(),
@@ -45,7 +44,7 @@ public class FileServices :IFileServices
                         SpaceshipId = spaceship.Id
                     };
 
-                    _dbContext.FilesToApis.AddAsync(path);
+                    _dbContext.FilesToApis.Add(path);
                 }
             }
         }
