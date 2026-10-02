@@ -126,8 +126,6 @@ public class SpaceshipController : Controller
             FileToApiDtos = MapToImageDtos(viewmodel)
         };
         
-        
-        
         var result = await _spaceshipService.Update(dto); 
 
         if (result == null)

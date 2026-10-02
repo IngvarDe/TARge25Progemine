@@ -11,11 +11,7 @@ public class RealEstateController : Controller
     private readonly IRealEstateServices _realEstateServices;
         private readonly TARge25ShopContext _dbContext;
 
-        public RealEstateController
-            (
-                IRealEstateServices realEstateServices,
-                TARge25ShopContext dbContext
-            )
+        public RealEstateController (IRealEstateServices realEstateServices, TARge25ShopContext dbContext)
         {
             _realEstateServices = realEstateServices;
             _dbContext = dbContext;
@@ -57,9 +53,10 @@ public class RealEstateController : Controller
 
             var result = await _realEstateServices.Create(dto);
 
-            if (result == null)
-            {
-                return RedirectToAction(nameof(Index));
+            if (result == null) {
+                ModelState.AddModelError(
+                    string.Empty, "Could not create real estate! Check your fields and try again."
+                );
             }
 
             return RedirectToAction(nameof(Index));
@@ -75,38 +72,38 @@ public class RealEstateController : Controller
                 return NotFound();
             }
 
-            var vm = new RealEstateCreateUpdateViewModel();
+            var viewModel = new RealEstateCreateUpdateViewModel();
 
-            vm.Id = realEstate.Id;
-            vm.Area = realEstate.Area;
-            vm.Location = realEstate.Location;
-            vm.RoomNumber = realEstate.RoomNumber;
-            vm.BuildingType = realEstate.BuildingType;
-            vm.CreatedAt = realEstate.CreatedAt;
-            vm.ModifiedAt = realEstate.ModifiedAt;
+            viewModel.Id = realEstate.Id;
+            viewModel.Area = realEstate.Area;
+            viewModel.Location = realEstate.Location;
+            viewModel.RoomNumber = realEstate.RoomNumber;
+            viewModel.BuildingType = realEstate.BuildingType;
+            viewModel.CreatedAt = realEstate.CreatedAt;
+            viewModel.ModifiedAt = realEstate.ModifiedAt;
 
-            return View("CreateUpdate", vm);
+            return View("CreateUpdate", viewModel);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Update(RealEstateCreateUpdateViewModel vm)
+        public async Task<IActionResult> Update(RealEstateCreateUpdateViewModel viewModel)
         {
             var dto = new RealEstateDto()
             {
-                Id = vm.Id,
-                Area = vm.Area,
-                Location = vm.Location,
-                RoomNumber = vm.RoomNumber,
-                BuildingType = vm.BuildingType,
-                CreatedAt = vm.CreatedAt,
-                ModifiedAt = vm.ModifiedAt
+                Id = viewModel.Id,
+                Area = viewModel.Area,
+                Location = viewModel.Location,
+                RoomNumber = viewModel.RoomNumber,
+                BuildingType = viewModel.BuildingType,
+                CreatedAt = viewModel.CreatedAt,
+                ModifiedAt = viewModel.ModifiedAt
             };
 
             var result = await _realEstateServices.Update(dto);
 
             if (result == null)
             {
-                return RedirectToAction(nameof(Index));
+                return NotFound();
             }
 
             return RedirectToAction(nameof(Index));
@@ -122,17 +119,17 @@ public class RealEstateController : Controller
                 return NotFound();
             }
 
-            var vm = new RealEstateDeleteViewModel();
+            var viewModel = new RealEstateDeleteViewModel();
 
-            vm.Id = realEstate.Id;
-            vm.Area = realEstate.Area;
-            vm.Location = realEstate.Location;
-            vm.RoomNumber = realEstate.RoomNumber;
-            vm.BuildingType = realEstate.BuildingType;
-            vm.CreatedAt = realEstate.CreatedAt;
-            vm.ModifiedAt = realEstate.ModifiedAt;
+            viewModel.Id = realEstate.Id;
+            viewModel.Area = realEstate.Area;
+            viewModel.Location = realEstate.Location;
+            viewModel.RoomNumber = realEstate.RoomNumber;
+            viewModel.BuildingType = realEstate.BuildingType;
+            viewModel.CreatedAt = realEstate.CreatedAt;
+            viewModel.ModifiedAt = realEstate.ModifiedAt;
 
-            return View(vm);
+            return View(viewModel);
         }
 
         [HttpPost]
@@ -142,7 +139,7 @@ public class RealEstateController : Controller
 
             if (realEstate == null)
             {
-                return RedirectToAction(nameof(Index));
+                return NotFound();
             }
 
             return RedirectToAction(nameof(Index));
@@ -158,16 +155,16 @@ public class RealEstateController : Controller
                 return NotFound();
             }
 
-            var vm = new RealEstateDetailsViewModel();
+            var viewModel = new RealEstateDetailsViewModel();
 
-            vm.Id = realEstate.Id;
-            vm.Area = realEstate.Area;
-            vm.Location = realEstate.Location;
-            vm.RoomNumber = realEstate.RoomNumber;
-            vm.BuildingType = realEstate.BuildingType;
-            vm.CreatedAt = realEstate.CreatedAt;
-            vm.ModifiedAt = realEstate.ModifiedAt;
+            viewModel.Id = realEstate.Id;
+            viewModel.Area = realEstate.Area;
+            viewModel.Location = realEstate.Location;
+            viewModel.RoomNumber = realEstate.RoomNumber;
+            viewModel.BuildingType = realEstate.BuildingType;
+            viewModel.CreatedAt = realEstate.CreatedAt;
+            viewModel.ModifiedAt = realEstate.ModifiedAt;
 
-            return View(vm);
+            return View(viewModel);
         }
 }
