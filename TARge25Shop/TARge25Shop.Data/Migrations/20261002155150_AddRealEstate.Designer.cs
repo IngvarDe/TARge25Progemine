@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TARge25Shop.Data;
 
@@ -10,9 +11,11 @@ using TARge25Shop.Data;
 namespace TARge25Shop.Data.Migrations
 {
     [DbContext(typeof(TARge25ShopContext))]
-    partial class TARge25ShopContextModelSnapshot : ModelSnapshot
+    [Migration("20261002155150_AddRealEstate")]
+    partial class AddRealEstate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "10.0.11");
@@ -41,7 +44,7 @@ namespace TARge25Shop.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<double?>("AreaCode")
+                    b.Property<double?>("Area")
                         .HasColumnType("REAL");
 
                     b.Property<string>("BuildingType")
@@ -58,7 +61,7 @@ namespace TARge25Shop.Data.Migrations
                     b.Property<DateTime?>("ModifiedAt")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("NrOfRooms")
+                    b.Property<int>("RoomNumber")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");

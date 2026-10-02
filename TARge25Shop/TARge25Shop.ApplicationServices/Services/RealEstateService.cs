@@ -24,9 +24,9 @@ namespace TARge25Shop.ApplicationServices.Services
             var realEstate = new RealEstate();
 
             realEstate.Id = Guid.NewGuid();
-            realEstate.Area = dto.Area;
+            realEstate.AreaCode = dto.AreaCode;
             realEstate.Location = dto.Location;
-            realEstate.RoomNumber = dto.RoomNumber;
+            realEstate.NrOfRooms = dto.NrOfRooms;
             realEstate.BuildingType = dto.BuildingType;
             realEstate.CreatedAt = DateTime.Now;
             realEstate.ModifiedAt = DateTime.Now;
@@ -42,9 +42,9 @@ namespace TARge25Shop.ApplicationServices.Services
             var realEstate = new RealEstate();
 
             realEstate.Id = dto.Id;
-            realEstate.Area = dto.Area;
+            realEstate.AreaCode = dto.AreaCode;
             realEstate.Location = dto.Location;
-            realEstate.RoomNumber = dto.RoomNumber;
+            realEstate.NrOfRooms = dto.NrOfRooms;
             realEstate.BuildingType = dto.BuildingType;
             realEstate.CreatedAt = dto.CreatedAt;
             realEstate.ModifiedAt = DateTime.Now;

@@ -23,9 +23,9 @@ public class RealEstateController : Controller
                 .Select(x => new RealEstateIndexViewModel
                 {
                     Id = x.Id,
-                    Area = x.Area,
+                    AreaCode = x.AreaCode,
                     Location = x.Location,
-                    RoomNumber = x.RoomNumber,
+                    NrOfRooms = x.NrOfRooms,
                     BuildingType = x.BuildingType
                 });
 
@@ -45,9 +45,9 @@ public class RealEstateController : Controller
         {
             var dto = new RealEstateDto
             {
-                Area = vm.Area,
+                AreaCode = vm.AreaCode,
                 Location = vm.Location,
-                RoomNumber = vm.RoomNumber,
+                NrOfRooms = vm.NrOfRooms,
                 BuildingType = vm.BuildingType
             };
 
@@ -75,9 +75,9 @@ public class RealEstateController : Controller
             var viewModel = new RealEstateCreateUpdateViewModel();
 
             viewModel.Id = realEstate.Id;
-            viewModel.Area = realEstate.Area;
+            viewModel.AreaCode = realEstate.AreaCode;
             viewModel.Location = realEstate.Location;
-            viewModel.RoomNumber = realEstate.RoomNumber;
+            viewModel.NrOfRooms = realEstate.NrOfRooms;
             viewModel.BuildingType = realEstate.BuildingType;
             viewModel.CreatedAt = realEstate.CreatedAt;
             viewModel.ModifiedAt = realEstate.ModifiedAt;
@@ -91,9 +91,9 @@ public class RealEstateController : Controller
             var dto = new RealEstateDto()
             {
                 Id = viewModel.Id,
-                Area = viewModel.Area,
+                AreaCode = viewModel.AreaCode,
                 Location = viewModel.Location,
-                RoomNumber = viewModel.RoomNumber,
+                NrOfRooms = viewModel.NrOfRooms,
                 BuildingType = viewModel.BuildingType,
                 CreatedAt = viewModel.CreatedAt,
                 ModifiedAt = viewModel.ModifiedAt
@@ -122,9 +122,9 @@ public class RealEstateController : Controller
             var viewModel = new RealEstateDeleteViewModel();
 
             viewModel.Id = realEstate.Id;
-            viewModel.Area = realEstate.Area;
+            viewModel.AreaCode = realEstate.AreaCode;
             viewModel.Location = realEstate.Location;
-            viewModel.RoomNumber = realEstate.RoomNumber;
+            viewModel.NrOfRooms = realEstate.NrOfRooms;
             viewModel.BuildingType = realEstate.BuildingType;
             viewModel.CreatedAt = realEstate.CreatedAt;
             viewModel.ModifiedAt = realEstate.ModifiedAt;
@@ -158,9 +158,9 @@ public class RealEstateController : Controller
             var viewModel = new RealEstateDetailsViewModel();
 
             viewModel.Id = realEstate.Id;
-            viewModel.Area = realEstate.Area;
+            viewModel.AreaCode = realEstate.AreaCode;
             viewModel.Location = realEstate.Location;
-            viewModel.RoomNumber = realEstate.RoomNumber;
+            viewModel.NrOfRooms = realEstate.NrOfRooms;
             viewModel.BuildingType = realEstate.BuildingType;
             viewModel.CreatedAt = realEstate.CreatedAt;
             viewModel.ModifiedAt = realEstate.ModifiedAt;
