@@ -39,8 +39,9 @@
     <hr />
 
     <div>
-        <form method="post">
+        <form method="get">
             <button asp-controller="chuckNorris" asp-action="Joke" class="btn btn-primary">Joke</button>
         </form>
+        <a asp-action="Index" asp-controller="chuckNorris" class="btn btn-success">Back</a>
     </div>
 </div>
