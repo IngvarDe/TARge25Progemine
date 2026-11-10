@@ -1,6 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using TARge25Shop.Core.ServiceInterface;
+using TARge25Shop.Core.Domain;
+using TARge25Shop.Models.Account;
+using TARge25Shop.Core.Dto;
+
 
 namespace TARge25Shop.Controllers
 {
@@ -8,16 +13,19 @@ namespace TARge25Shop.Controllers
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly IEmailServices _emailServices;
 
 
         public AccountController
             (
                 UserManager<ApplicationUser> userManager,
-                SignInManager<ApplicationUser> signInManager
+                SignInManager<ApplicationUser> signInManager,
+                IEmailServices emailServices
             )
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _emailServices = emailServices;
         }
 
         [HttpGet]
@@ -29,7 +37,7 @@ namespace TARge25Shop.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> Register(RegisterViewModel model)
+        public async Task<IActionResult> Register(RegisterViewModel vm)
         {
             if (ModelState.IsValid)
             {
@@ -43,7 +51,7 @@ namespace TARge25Shop.Controllers
 
                 var result = await _userManager.CreateAsync(user, vm.Password);
 
-                if (result.Succeede)
+                if (result.Succeeded)
                 {
                     var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
 
@@ -58,15 +66,34 @@ namespace TARge25Shop.Controllers
                     newsignup.Subject = "SHOP Confirm your email";
                     newsignup.To = user.Email;
 
+                    if(_signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+                    {
+                        return RedirectToAction("ListUsers", "Administration");
+                    }
+
+                    _emailServices.SendEmailToken(newsignup, token);
+                    List<string> errordatas =
+                        [
+                        "Area", "Accounts",
+                        "Issue", "Success",
+                        "StatusMessage", "Registration Sucess",
+                        "ActedOn", $"{vm.Email}",
+                        "CreatedAccountData", $"{vm.Email}\n{vm.City}\n[password hidden]\n[password hidden]"
+                        ];
+                    ViewBag.ErrorData = errordatas;
+                    ViewBag.ErrorTitle = "Registration Success";
+                    ViewBag.ErrorMessage = "Please check your email to confirm your account.";
+
+                    return View("ConfirmationEmailMessage");
                 }
 
-                // Implement registration logic here
-                // For example, create a new user and save it to the database
-                // Redirect to a success page or login page after successful registration
-                return RedirectToAction("Index", "Home");
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError("", error.Description);
+                }
             }
             // If we got this far, something failed; redisplay the form
-            return View(model);
+            return View();
         }
     }
 }
