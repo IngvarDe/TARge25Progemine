@@ -192,5 +192,45 @@ namespace TARge25Shop.Controllers
 
             return View(model);
         }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult ForgotPassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _userManager.FindByEmailAsync(model.Email);
+                if (user != null && await _userManager.IsEmailConfirmedAsync(user))
+                {
+                    //muutuja token tuleb uus token genereerida
+                    var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+                    //muutja passwordResetLink, mis viib Resetpassword vaatele
+                    var passwordResetLink = Url.Action("ResetPassword", "Account", new { email = model.Email, token = token }, Request.Scheme);
+
+                    //saadame emaili
+                    var emailDto = new EmailDto
+                    {
+                        //emaili sisu
+                        To = model.Email,
+                        Subject = "reset your password",
+                        Body = $"Please reset your password by clicking <a href='{passwordResetLink}'>here</a>"
+                    };
+
+                    _emailServices.SendEmail(emailDto);
+
+                    return View("ForgotPasswordConfirmation");
+                }
+                return View("ForgotPasswordConfirmation");
+            }
+            return View(model);
+        }
+
     }
 }
