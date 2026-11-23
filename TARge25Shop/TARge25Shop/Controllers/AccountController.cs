@@ -275,7 +275,6 @@ namespace TARge25Shop.Controllers
                         ModelState.AddModelError("", error.Description);
                     }
 
-                    //kui õnnestub, siis returnib vaadet resetPasseordConfirmation
                     return View(model);
                 }   
                 //võib näidata viga, mis on tekkinud või suunab tagasi emaili kinnituse vaatesse
