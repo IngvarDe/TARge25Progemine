@@ -48,6 +48,16 @@ namespace TARge25Shop
                 .AddTokenProvider<DataProtectorTokenProvider<ApplicationUser>>("CustomEmailConfirmation");
 
 
+            builder.Services.AddAuthentication()
+                .AddGoogle(googleOptions =>
+                {
+                    googleOptions.ClientId = builder.Configuration["Authentication:Google:ClientId"]
+                        ?? throw new InvalidOperationException("Google ClientId not found.");
+
+                    googleOptions.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"]
+                        ?? throw new InvalidOperationException("Google ClientSecret not found.");
+                });
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
